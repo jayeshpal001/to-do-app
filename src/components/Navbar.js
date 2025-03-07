@@ -1,3 +1,4 @@
+import React from "react";
 import { useState } from "react";
 import { Menu, X } from "lucide-react"; // Import icons for mobile menu
 
@@ -5,7 +6,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="fixed w-full top-0 left-0 bg-gradient-to-r from-cyan-500/30 to-blue-500/30  backdrop-blur-md shadow-lg">
+    <nav className="fixed w-full top-0 left-0 bg-gradient-to-r from-green-500/30 to-blue-500/30 backdrop-blur-sm shadow-lg">
       <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           {/* Logo */}
