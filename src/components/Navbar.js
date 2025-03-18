@@ -1,9 +1,9 @@
 import React from "react";
-import { useState } from "react";
-import { Menu, X } from "lucide-react"; // Import icons for mobile menu
+// import { useState } from "react";
+// import { Menu, X } from "lucide-react"; // Import icons for mobile menu
 
 export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
+  // const [isOpen, setIsOpen] = useState(false);
 
   return (
     <nav className="fixed w-full top-0 left-0 bg-gradient-to-r from-[rgba(255,255,255,0.08)] to-[rgba(255,255,255,0.04)] backdrop-blur-sm shadow-lg">
