@@ -1,86 +1,68 @@
-import React, { useEffect } from "react";
-import Navbar from "./components/Navbar";
-import { Todos } from "./components/Todos";
-import { AddTodo } from "./components/AddTodo";
-import { useState } from "react";
-import { About } from "./components/About";
-import Footer from "./components/Footer";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-// import { editableInputTypes } from "@testing-library/user-event/dist/utils";
+import React, { useEffect, useState } from "react"; // Importing React and hooks: useState (for managing state) and useEffect (for side effects)
+import Navbar from "./components/Navbar"; // Importing the Navbar component
+import { Todos } from "./components/Todos"; // Importing the Todos component
+import { AddTodo } from "./components/AddTodo"; // Importing the AddTodo component
+import { About } from "./components/About"; // Importing the About component
+import Footer from "./components/Footer"; // Importing the Footer component
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom"; // Importing React Router for navigation
+
 function App() {
-  let initTodo;
-  if (localStorage.getItem("todos") === null) {
-    initTodo = [];
-  } else {
-    initTodo = JSON.parse(localStorage.getItem("todos"));
-  }
-  const onEdit = (sno, updatedTitle, updatedDesc) => {
-    setTodos((prevTodos) => {
-      const edit = prevTodos.map((todo) =>
-        todo.sno === sno
-          ? { ...todo, title: updatedTitle, desc: updatedDesc }
-          : todo
-      );
-      localStorage.setItem("todos", JSON.stringify(edit));
-      return edit; 
-    });
-  };
+  // Using useState to manage todos list, initializing from localStorage if available
+  const [todos, setTodos] = useState(() => {
+    const savedTodos = localStorage.getItem("todos"); // Retrieving stored todos
+    return savedTodos ? JSON.parse(savedTodos) : []; // Parsing and returning if available, else returning empty array
+  });
 
-  const onDelete = (todo) => {
-    setTodos((prevTodos) => {
-      const updatedTodos = prevTodos.filter((e) => e !== todo);
-      localStorage.setItem("todos", JSON.stringify(updatedTodos));
-      return updatedTodos;
-    });
-  };
-
-  const addTodo = (title, desc) => {
-    console.log("I am adding this todo", title, desc);
-    let sno;
-    if (todos.length === 0) {
-      sno = 1;
-    } else {
-      sno = todos[todos.length - 1].sno + 1;
-    }
-
-    const myTodo = {
-      sno: sno,
-      title: title,
-      desc: desc,
-    };
-    setTodos([...todos, myTodo]);
-    console.log(myTodo);
-  };
-
-  const [todos, setTodos] = useState(initTodo);
-
+  // useEffect to store todos in localStorage whenever the todos state changes
   useEffect(() => {
-    localStorage.setItem("todos", JSON.stringify(todos));
-  }, [todos]);
+    localStorage.setItem("todos", JSON.stringify(todos)); // Storing todos array as a string
+  }, [todos]); // Runs whenever 'todos' changes
+
+  // Function to edit a todo
+  const onEdit = (sno, updatedTitle, updatedDesc) => {
+    setTodos((prevTodos) =>
+      prevTodos.map((todo) =>
+        todo.sno === sno
+          ? { ...todo, title: updatedTitle, desc: Array.isArray(updatedDesc) ? updatedDesc : [updatedDesc] }
+          : todo
+      )
+    );
+  };
+
+  // Function to delete a todo
+  const onDelete = (todo) => {
+    setTodos((prevTodos) => prevTodos.filter((e) => e.sno !== todo.sno)); // Removing todo with matching sno
+  };
+
+  // Function to add a new todo
+  const addTodo = (title, desc) => {
+    let sno = todos.length === 0 ? 1 : todos[todos.length - 1].sno + 1; // Generating serial number
+    const myTodo = { sno, title, desc: Array.isArray(desc) ? desc : [desc] }; // Creating a new todo object
+    setTodos([...todos, myTodo]); // Adding the new todo to the state
+  };
 
   return (
     <Router>
       <div className="h-screen flex flex-col">
-        {/* Navbar at the top */}
-        <Navbar />
+        <Navbar /> {/* Rendering the Navbar */}
         <Routes>
           <Route
             path="/"
             element={
               <>
-                <AddTodo addTodo={addTodo} />
+                <AddTodo addTodo={addTodo} /> {/* Rendering AddTodo component with addTodo function */}
                 <div className="flex-1 flex justify-center items-center bg-gray-900">
-                  <Todos todos={todos} onDelete={onDelete} onEdit={onEdit} />
+                  <Todos todos={todos} onDelete={onDelete} onEdit={onEdit} /> {/* Rendering Todos with props */}
                 </div>
               </>
             }
           />
-          <Route path="/about" element={<About />} />
+          <Route path="/about" element={<About />} /> {/* Rendering About page */}
         </Routes>
-        <Footer />
+        <Footer /> {/* Rendering the Footer */}
       </div>
     </Router>
   );
 }
 
-export default App;
+export default App; // Exporting App component
