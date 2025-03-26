@@ -14,15 +14,17 @@ export const TodoItems = ({ todo, onDelete }) => {
         <h3 className="text-2xl sm:text-3xl md:text-4xl font-mono font-extrabold py-3">
           {todo.sno}. {todo.title}
         </h3>
-        <ul className="list-disc text-base sm:text-lg px-4 sm:px-6">
+        <ul className="list-disc text-base sm:text-lg px-4 sm:px-6 ">
           <li>{todo.desc}</li>
         </ul>
+        <button className="mx-10 bg-blue-400 text-white rounded-lg px-3 py-2 mt-4 hover:bg-red-700 transition duration-300">Edit</button>
         <button
           className="bg-red-600 text-white rounded-lg px-3 py-2 mt-4 hover:bg-red-700 transition duration-300"
           onClick={() => onDelete(todo)}
         >
           Delete
         </button>
+        
       </div>
     </div>
   );

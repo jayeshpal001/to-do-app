@@ -5,7 +5,7 @@ import { AddTodo } from "./components/AddTodo";
 import { useState } from "react";
 import { About } from "./components/About";
 import Footer from "./components/Footer";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route} from "react-router-dom";
 function App() {
   let initTodo;
   if (localStorage.getItem("todos") === null) {

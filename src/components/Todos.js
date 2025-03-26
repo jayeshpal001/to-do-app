@@ -9,7 +9,7 @@ export const Todos = ({ todos, onDelete }) => {
         <p className="text-red-500 text-2xl text-center mt-5">No Todos to display</p>
       ) : (
         todos.map((items) => {
-          return(<><TodoItems todo={items} key={items.sno} onDelete={onDelete} /></> ) 
+          return(<TodoItems todo={items} key={items.sno} onDelete={onDelete} />) 
         })
       )}
     </div>
