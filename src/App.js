@@ -5,7 +5,8 @@ import { AddTodo } from "./components/AddTodo";
 import { useState } from "react";
 import { About } from "./components/About";
 import Footer from "./components/Footer";
-import { BrowserRouter as Router, Routes, Route} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+// import { editableInputTypes } from "@testing-library/user-event/dist/utils";
 function App() {
   let initTodo;
   if (localStorage.getItem("todos") === null) {
@@ -13,6 +14,18 @@ function App() {
   } else {
     initTodo = JSON.parse(localStorage.getItem("todos"));
   }
+  const onEdit = (sno, updatedTitle, updatedDesc) => {
+    setTodos((prevTodos) => {
+      const edit = prevTodos.map((todo) =>
+        todo.sno === sno
+          ? { ...todo, title: updatedTitle, desc: updatedDesc }
+          : todo
+      );
+      localStorage.setItem("todos", JSON.stringify(edit));
+      return edit; 
+    });
+  };
+
   const onDelete = (todo) => {
     setTodos((prevTodos) => {
       const updatedTodos = prevTodos.filter((e) => e !== todo);
@@ -57,7 +70,7 @@ function App() {
               <>
                 <AddTodo addTodo={addTodo} />
                 <div className="flex-1 flex justify-center items-center bg-gray-900">
-                  <Todos todos={todos} onDelete={onDelete} />
+                  <Todos todos={todos} onDelete={onDelete} onEdit={onEdit} />
                 </div>
               </>
             }
