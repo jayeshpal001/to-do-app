@@ -46,24 +46,27 @@ function App() {
   }, [todos]);
 
   return (
-    <div className="h-screen flex flex-col">
-      {/* Navbar at the top */}
-      <Router>
+    <Router>
+      <div className="h-screen flex flex-col">
+        {/* Navbar at the top */}
         <Navbar />
         <Routes>
-          <Route path="/"element={
+          <Route
+            path="/"
+            element={
               <>
                 <AddTodo addTodo={addTodo} />
                 <div className="flex-1 flex justify-center items-center bg-gray-900">
                   <Todos todos={todos} onDelete={onDelete} />
                 </div>
               </>
-            } />
+            }
+          />
           <Route path="/about" element={<About />} />
         </Routes>
         <Footer />
-      </Router>
-    </div>
+      </div>
+    </Router>
   );
 }
 
