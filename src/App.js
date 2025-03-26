@@ -1,67 +1,44 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "./components/Navbar";
 import { Todos } from "./components/Todos";
 import { AddTodo } from "./components/AddTodo";
-import { useState } from "react";
 import { About } from "./components/About";
 import Footer from "./components/Footer";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-// import { editableInputTypes } from "@testing-library/user-event/dist/utils";
+
 function App() {
-  let initTodo;
-  if (localStorage.getItem("todos") === null) {
-    initTodo = [];
-  } else {
-    initTodo = JSON.parse(localStorage.getItem("todos"));
-  }
-  const onEdit = (sno, updatedTitle, updatedDesc) => {
-    setTodos((prevTodos) => {
-      const edit = prevTodos.map((todo) =>
-        todo.sno === sno
-          ? { ...todo, title: updatedTitle, desc: updatedDesc }
-          : todo
-      );
-      localStorage.setItem("todos", JSON.stringify(edit));
-      return edit; 
-    });
-  };
-
-  const onDelete = (todo) => {
-    setTodos((prevTodos) => {
-      const updatedTodos = prevTodos.filter((e) => e !== todo);
-      localStorage.setItem("todos", JSON.stringify(updatedTodos));
-      return updatedTodos;
-    });
-  };
-
-  const addTodo = (title, desc) => {
-    console.log("I am adding this todo", title, desc);
-    let sno;
-    if (todos.length === 0) {
-      sno = 1;
-    } else {
-      sno = todos[todos.length - 1].sno + 1;
-    }
-
-    const myTodo = {
-      sno: sno,
-      title: title,
-      desc: desc,
-    };
-    setTodos([...todos, myTodo]);
-    console.log(myTodo);
-  };
-
-  const [todos, setTodos] = useState(initTodo);
+  const [todos, setTodos] = useState(() => {
+    const savedTodos = localStorage.getItem("todos");
+    return savedTodos ? JSON.parse(savedTodos) : [];
+  });
 
   useEffect(() => {
     localStorage.setItem("todos", JSON.stringify(todos));
   }, [todos]);
 
+  const onEdit = (sno, updatedTitle, updatedDesc) => {
+    setTodos((prevTodos) =>
+      prevTodos.map((todo) =>
+        todo.sno === sno
+          ? { ...todo, title: updatedTitle, desc: Array.isArray(updatedDesc) ? updatedDesc : [updatedDesc] }
+          : todo
+      )
+    );
+  };
+
+  const onDelete = (todo) => {
+    setTodos((prevTodos) => prevTodos.filter((e) => e.sno !== todo.sno));
+  };
+
+  const addTodo = (title, desc) => {
+    let sno = todos.length === 0 ? 1 : todos[todos.length - 1].sno + 1;
+    const myTodo = { sno, title, desc: Array.isArray(desc) ? desc : [desc] };
+    setTodos([...todos, myTodo]);
+  };
+
   return (
     <Router>
       <div className="h-screen flex flex-col">
-        {/* Navbar at the top */}
         <Navbar />
         <Routes>
           <Route
